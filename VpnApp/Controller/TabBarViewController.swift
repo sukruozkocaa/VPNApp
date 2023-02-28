@@ -11,6 +11,10 @@ protocol serverListControl {
     func goServer()
 }
 
+protocol selectLocationProtocol {
+    func selectLocation(imageName: String, countryName: String)
+}
+
 class TabBarViewController: UIViewController {
 
     private let contentView: UIView = {
@@ -90,6 +94,8 @@ class TabBarViewController: UIViewController {
         button.addTarget(self, action: #selector(selectButton), for: .touchDown)
         return button
     }()
+    
+    var delegate: selectLocationProtocol?
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -219,5 +225,12 @@ extension TabBarViewController: serverListControl {
     func goServer() {
         let vc = ServerListViewController()
         self.present(vc, animated: true)
+        vc.delegate = self
+    }
+}
+
+extension TabBarViewController: selectLocationProtocol {
+    func selectLocation(imageName: String, countryName: String) {
+        delegate?.selectLocation(imageName: imageName, countryName: countryName)
     }
 }

@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 class HomeViewController: UIViewController {
-
+    
     private let imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.image = UIImage(named: "network")
@@ -75,6 +75,96 @@ class HomeViewController: UIViewController {
         return label
     }()
     
+
+    //MARK: - Network
+    private let networkBgView: UIView = {
+       let view = UIView()
+        view.backgroundColor = .darkGray
+        view.layer.opacity = 0.9
+        view.layer.masksToBounds = false
+        view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let uploadImageView: UIImageView = {
+       let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "arrow.up.circle")
+        imageView.tintColor = .orange
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private let uploadLabel: UILabel = {
+       let label = UILabel()
+        label.text = "UPLOAD"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.font = UIFont(name: "GillSans-Bold", size: 12)
+        return label
+    }()
+    
+    private let uploadSpeedLabel: UILabel = {
+       let label = UILabel()
+        label.text = "0 Kb/s"
+        label.textColor = .orange
+        label.font = UIFont(name: "GillSans-Bold", size: 13)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let lineView: UIView = {
+       let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .red
+        return view
+    }()
+    
+    private let downloadImageView: UIImageView = {
+       let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "arrow.down.circle")
+        imageView.tintColor = .blue
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
+    private let downloadLabel: UILabel = {
+       let label = UILabel()
+        label.text = "DOWNLOAD"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.font = UIFont(name: "GillSans-Bold", size: 12)
+        return label
+    }()
+    
+    private let downloadpeedLabel: UILabel = {
+       let label = UILabel()
+        label.text = "0 Mb/s"
+        label.textColor = .blue
+        label.font = UIFont(name: "GillSans-Bold", size: 13)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    //MARK: - Time
+    private let timeLabel: UILabel = {
+       let label = UILabel()
+        label.text = "00:00:00"
+        label.font = UIFont(name: "Copperplate", size: 70)
+        label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private let connectLabel: UILabel = {
+       let label = UILabel()
+        label.text = "NOT CONNECTED"
+        label.textColor = .red
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name: "GillSans-Bold", size: 15)
+        return label
+    }()
+    
     //MARK: - SelectLocationView
     private let locationBgView: UIView = {
        let view = UIView()
@@ -125,7 +215,7 @@ class HomeViewController: UIViewController {
             make.width.equalTo(view.frame.width*0.3)
             make.height.equalTo(view.frame.height*0.3)
             make.centerX.equalTo(view)
-            make.bottom.equalTo(view).offset(-250)
+            make.bottom.equalTo(view).offset(-220)
         }
         startView.addSubview(startButton)
         startButton.snp.makeConstraints { (make) in
@@ -153,8 +243,68 @@ class HomeViewController: UIViewController {
             make.centerY.equalTo(menuButton)
             make.centerX.equalTo(view)
         }
+        view.addSubview(timeLabel)
+        timeLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(titleLabel).offset(view.frame.height*0.1)
+            make.centerX.equalTo(view)
+        }
+        view.addSubview(connectLabel)
+        connectLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(timeLabel).offset(view.frame.height*0.1)
+            make.centerX.equalTo(view)
+        }
+        view.addSubview(networkBgView)
+        networkBgView.snp.makeConstraints { (make) in
+            make.width.equalTo(view.frame.width*0.8)
+            make.height.equalTo(view.frame.height*0.1)
+            make.centerX.equalTo(view)
+            make.top.equalTo(connectLabel).offset(view.frame.height*0.05)
+        }
         
+        networkBgView.layer.cornerRadius = (view.frame.height*0.1)/2
         view.addSubview(locationBgView)
+        networkBgView.addSubview(uploadImageView)
+        uploadImageView.snp.makeConstraints { (make) in
+            make.top.equalTo(networkBgView).offset(15)
+            make.left.equalTo(networkBgView).offset(30)
+            make.width.equalTo(30)
+            make.height.equalTo(30)
+        }
+        networkBgView.addSubview(uploadLabel)
+        uploadLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(uploadImageView).offset(40)
+            make.centerY.equalTo(uploadImageView)
+        }
+        networkBgView.addSubview(uploadSpeedLabel)
+        uploadSpeedLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(networkBgView).offset(30)
+            make.bottom.equalTo(networkBgView).offset(-15)
+        }
+        networkBgView.addSubview(lineView)
+        lineView.snp.makeConstraints { (make) in
+            make.centerX.equalTo(networkBgView)
+            make.centerY.equalTo(networkBgView)
+            make.width.equalTo(2)
+            make.height.equalTo(view.frame.height*0.1-view.frame.height*0.02)
+        }
+        networkBgView.addSubview(downloadLabel)
+        downloadLabel.snp.makeConstraints { (make) in
+            make.centerY.equalTo(uploadImageView)
+            make.right.equalTo(networkBgView).offset(-20)
+        }
+        networkBgView.addSubview(downloadImageView)
+        downloadImageView.snp.makeConstraints { (make) in
+            make.top.equalTo(networkBgView).offset(15)
+            make.right.equalTo(downloadLabel).offset(-90)
+            make.width.equalTo(30)
+            make.height.equalTo(30)
+        }
+        networkBgView.addSubview(downloadpeedLabel)
+        downloadpeedLabel.snp.makeConstraints { (make) in
+            make.left.equalTo(lineView).offset(20)
+            make.bottom.equalTo(networkBgView).offset(-15)
+        }
+        
         locationBgView.snp.makeConstraints { (make) in
             make.bottom.equalTo(view).offset(-view.frame.height*0.15)
             make.centerX.equalTo(view)
@@ -195,6 +345,10 @@ class HomeViewController: UIViewController {
                 self.startButton.translatesAutoresizingMaskIntoConstraints = true
                 self.startButton.frame = CGRect(x: 0, y: 0, width: self.startView.frame.width, height: self.startView.frame.width)
                 self.startButton.tintColor = .green
+                self.connectLabel.text = "CONNECTED"
+                self.downloadpeedLabel.text = "110 Mb/s"
+                self.uploadSpeedLabel.text = "342 Kb/s"
+                self.connectLabel.textColor = .green
                 self.startView.layer.borderColor = UIColor.green.cgColor
                 self.selectCount = 1
             }
@@ -203,6 +357,10 @@ class HomeViewController: UIViewController {
             UIView.animate(withDuration: 0.5, delay: 0.6) {
                 self.startButton.frame = CGRect(x: 0, y: self.startView.frame.height-self.startButton.frame.height, width: self.startView.frame.width, height: self.startView.frame.width)
                 self.startButton.tintColor = .red
+                self.connectLabel.text = "NOT CONNECTED"
+                self.downloadpeedLabel.text = "0 Mb/s"
+                self.uploadSpeedLabel.text = "0 Kb/s"
+                self.connectLabel.textColor = .red
                 self.startView.layer.borderColor = UIColor.red.cgColor
                 self.selectCount = 0
             }

@@ -77,6 +77,7 @@
                         </constraints>
                     </view>
                 </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 <constraints>
                     <constraint firstItem="GFm-Nk-CFC" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-16" id="8m4-zU-J9O"/>
                     <constraint firstItem="GFm-Nk-CFC" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="IbD-2a-5Uo"/>
@@ -90,6 +91,7 @@
                 <outlet property="countryLabel" destination="Dl8-gD-BPM" id="ySS-3L-XfP"/>
                 <outlet property="flagImageView" destination="Csg-Se-Tva" id="zpe-TA-Ilc"/>
                 <outlet property="lineView" destination="Dar-DP-wUK" id="pYz-JD-RVY"/>
+                <outlet property="selectLocationButton" destination="BMw-Ps-UhE" id="din-gu-8nZ"/>
             </connections>
             <point key="canvasLocation" x="138.93129770992365" y="26.056338028169016"/>
         </tableViewCell>

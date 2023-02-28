@@ -88,6 +88,8 @@ class ServerListViewController: UIViewController {
     }()
     
     let flags = ["turkey","america","france","italy"]
+    var selectIndex: Int = 0
+    var locations = ["Turkey","United States","France","Italy"]
     
     private let optimalServerTableView: UITableView = {
         let tableView = UITableView()
@@ -105,6 +107,8 @@ class ServerListViewController: UIViewController {
         button.setTitleColor(UIColor(red: 54/255, green: 195/255, blue: 58/255, alpha: 1), for: .normal)
         return button
     }()
+    
+    var delegate: selectLocationProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -190,6 +194,10 @@ extension ServerListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: ServersTableViewCell = tableView.dequeueReusableCell(withIdentifier: "tableCell", for: indexPath) as! ServersTableViewCell
         cell.flagImageView.image = UIImage(named: flags[indexPath.row])
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = UIColor.clear
+        cell.selectedBackgroundView = bgColorView
+        cell.countryLabel.text = locations[indexPath.row]
         return cell
     }
     
@@ -200,5 +208,10 @@ extension ServerListViewController: UITableViewDelegate, UITableViewDataSource {
         else {
             return 80
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.selectIndex = indexPath.row
+        delegate?.selectLocation(imageName: flags[selectIndex], countryName: locations[selectIndex])
     }
 }
