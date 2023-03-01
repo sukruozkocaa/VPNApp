@@ -100,6 +100,11 @@ class TabBarViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         contentView.frame = view.bounds
+        let vc = HomeViewController()
+        vc.delegate = self
+        contentView.addSubview(vc.view)
+        self.addChild(vc)
+        vc.didMove(toParent: self)
     }
     
     override func viewDidLoad() {
