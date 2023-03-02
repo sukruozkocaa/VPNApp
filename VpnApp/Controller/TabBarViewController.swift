@@ -6,17 +6,15 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol serverListControl {
     func goServer()
 }
 
-protocol selectLocationProtocol {
-    func selectLocation(imageName: String, countryName: String)
-}
-
 class TabBarViewController: UIViewController {
 
+    //MARK: - ContentView
     private let contentView: UIView = {
        let view = UIView()
         view.backgroundColor = .red
@@ -31,8 +29,7 @@ class TabBarViewController: UIViewController {
         return view
     }()
     
-    //MARK: - TabBar Items
-    
+    //MARK: - TabBarItems
     //HomeButton
     private let homeView: UIView = {
        let view = UIView()
@@ -75,6 +72,7 @@ class TabBarViewController: UIViewController {
         return button
     }()
     
+    //PersonButton
     private let personView: UIView = {
        let view = UIView()
         view.backgroundColor = .white
@@ -95,12 +93,10 @@ class TabBarViewController: UIViewController {
         return button
     }()
     
-    var delegate: selectLocationProtocol?
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        contentView.frame = view.bounds
         let vc = HomeViewController()
+        contentView.frame = view.bounds
         vc.delegate = self
         contentView.addSubview(vc.view)
         self.addChild(vc)
@@ -109,120 +105,83 @@ class TabBarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        getAllItems()
+    }
+    
+    func getAllItems() {
         view.addSubview(contentView)
         view.addSubview(TabBarView)
-        tabBarViewConstraints()
-        
+        TabBarView.snp.makeConstraints { (make) in
+            make.width.equalTo(view.frame.width)
+            make.height.equalTo(view.frame.height*0.15)
+            make.bottom.equalTo(view).offset(0)
+        }
         TabBarView.addSubview(homeButton)
+        homeButton.snp.makeConstraints { (make) in
+            make.width.equalTo(view.frame.width*0.1)
+            make.height.equalTo(view.frame.width*0.09)
+            make.left.equalTo(TabBarView).offset(view.frame.width*0.17)
+            make.top.equalTo(TabBarView).offset(20)
+        }
         TabBarView.addSubview(analysisButton)
+        analysisButton.snp.makeConstraints { (make) in
+            make.width.equalTo(view.frame.width*0.09)
+            make.height.equalTo(view.frame.width*0.09)
+            make.centerX.equalTo(TabBarView)
+            make.top.equalTo(TabBarView).offset(20)
+        }
         TabBarView.addSubview(personButton)
+        personButton.snp.makeConstraints { (make) in
+            make.width.equalTo(view.frame.width*0.09)
+            make.height.equalTo(view.frame.width*0.09)
+            make.right.equalTo(TabBarView).offset(-view.frame.width*0.17)
+            make.top.equalTo(TabBarView).offset(20)
+        }
         TabBarView.addSubview(homeView)
+        homeView.snp.makeConstraints { (make) in
+            make.width.equalTo(8)
+            make.height.equalTo(8)
+            make.centerX.equalTo(homeButton)
+            make.bottom.equalTo(homeButton).offset(17)
+        }
         TabBarView.addSubview(analysisView)
+        analysisView.snp.makeConstraints { (make) in
+            make.width.equalTo(8)
+            make.height.equalTo(8)
+            make.centerX.equalTo(analysisButton)
+            make.bottom.equalTo(analysisButton).offset(17)
+        }
         TabBarView.addSubview(personView)
-        tabBarItemsConstraints()
-        
+        personView.snp.makeConstraints { (make) in
+            make.width.equalTo(8)
+            make.height.equalTo(8)
+            make.centerX.equalTo(personButton)
+            make.bottom.equalTo(personButton).offset(17)
+        }
     }
     
     @objc func selectButton(sender: UIButton) {
-        if sender.tag == 0 {
-            homeView.backgroundColor = .green
-            homeButton.tintColor = .green
-            
-            analysisView.backgroundColor = .white
-            analysisButton.tintColor = .white
-            
-            personView.backgroundColor = .white
-            personButton.tintColor = .white
-            
-            let vc = HomeViewController()
-            vc.delegate = self
-            contentView.addSubview(vc.view)
-            self.addChild(vc)
-            vc.didMove(toParent: self)
-            
+        if sender.tag == 0{
+            editSelectItems(homeVwColor: .green, homeBtnColor: .green, analysisVwColor: .white, analysisBtnColor: .white, personVwColor: .white, personBtnColor: .white,vc: HomeViewController())
         }
         else if sender.tag == 1 {
-            homeView.backgroundColor = .white
-            homeButton.tintColor = .white
-            
-            analysisView.backgroundColor = .green
-            analysisButton.tintColor = .green
-            
-            personView.backgroundColor = .white
-            personButton.tintColor = .white
-            
-            let vc = AnalysisViewController()
-            contentView.addSubview(vc.view)
-            self.addChild(vc)
-            vc.didMove(toParent: self)
+            editSelectItems(homeVwColor: .white, homeBtnColor: .white, analysisVwColor: .green, analysisBtnColor: .green, personVwColor: .white, personBtnColor: .white,vc: AnalysisViewController())
         }
         else {
-            homeView.backgroundColor = .white
-            homeButton.tintColor = .white
-            
-            analysisView.backgroundColor = .white
-            analysisButton.tintColor = .white
-            
-            personView.backgroundColor = .green
-            personButton.tintColor = .green
-            
-            let vc = PersonViewController()
-            contentView.addSubview(vc.view)
-            self.addChild(vc)
-            vc.didMove(toParent: self)
+            editSelectItems(homeVwColor: .white, homeBtnColor: .white, analysisVwColor: .white, analysisBtnColor: .white, personVwColor: .green, personBtnColor: .green,vc: PersonViewController())
         }
     }
     
-    func tabBarViewConstraints() {
-        NSLayoutConstraint.activate([
-            TabBarView.widthAnchor.constraint(equalToConstant: view.frame.width),
-            TabBarView.heightAnchor.constraint(equalToConstant: view.frame.height*0.15),
-            TabBarView.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: 0)
-        ])
-    }
-    
-    func tabBarItemsConstraints() {
-        NSLayoutConstraint.activate([
-            homeButton.widthAnchor.constraint(equalToConstant: view.frame.width*0.1),
-            homeButton.heightAnchor.constraint(equalToConstant: view.frame.width*0.09),
-            homeButton.leftAnchor.constraint(equalTo: TabBarView.leftAnchor, constant: view.frame.width*0.17),
-            homeButton.topAnchor.constraint(equalTo: TabBarView.topAnchor,constant: 20)
-        ])
-        
-        NSLayoutConstraint.activate([
-            homeView.widthAnchor.constraint(equalToConstant: 8),
-            homeView.heightAnchor.constraint(equalToConstant: 8),
-            homeView.centerXAnchor.constraint(equalTo: homeButton.centerXAnchor),
-            homeView.topAnchor.constraint(equalTo: homeButton.bottomAnchor,constant: 17)
-        ])
-        
-        NSLayoutConstraint.activate([
-            analysisButton.widthAnchor.constraint(equalToConstant: view.frame.width*0.09),
-            analysisButton.heightAnchor.constraint(equalToConstant: view.frame.width*0.09),
-            analysisButton.leftAnchor.constraint(equalTo: homeButton.rightAnchor, constant: view.frame.width*0.20),
-            analysisButton.topAnchor.constraint(equalTo: TabBarView.topAnchor,constant: 20)
-        ])
-        
-        NSLayoutConstraint.activate([
-            analysisView.widthAnchor.constraint(equalToConstant: 8),
-            analysisView.heightAnchor.constraint(equalToConstant: 8),
-            analysisView.centerXAnchor.constraint(equalTo: analysisButton.centerXAnchor),
-            analysisView.topAnchor.constraint(equalTo: analysisButton.bottomAnchor,constant: 17)
-        ])
-        
-        NSLayoutConstraint.activate([
-            personButton.widthAnchor.constraint(equalToConstant: view.frame.width*0.09),
-            personButton.heightAnchor.constraint(equalToConstant: view.frame.width*0.09),
-            personButton.leftAnchor.constraint(equalTo: analysisButton.rightAnchor, constant: view.frame.width*0.20),
-            personButton.topAnchor.constraint(equalTo: TabBarView.topAnchor,constant: 20)
-        ])
-        
-        NSLayoutConstraint.activate([
-            personView.widthAnchor.constraint(equalToConstant: 8),
-            personView.heightAnchor.constraint(equalToConstant: 8),
-            personView.centerXAnchor.constraint(equalTo: personButton.centerXAnchor),
-            personView.topAnchor.constraint(equalTo: personButton.bottomAnchor,constant: 17)
-        ])
+    func editSelectItems(homeVwColor: UIColor, homeBtnColor: UIColor, analysisVwColor: UIColor, analysisBtnColor: UIColor, personVwColor: UIColor, personBtnColor: UIColor, vc: UIViewController) {
+        self.homeView.backgroundColor = homeVwColor
+        self.homeButton.tintColor = homeBtnColor
+        self.analysisView.backgroundColor = analysisVwColor
+        self.analysisButton.tintColor = analysisBtnColor
+        self.personView.backgroundColor = personVwColor
+        self.personButton.tintColor = personBtnColor
+        contentView.addSubview(vc.view)
+        self.addChild(vc)
+        vc.didMove(toParent: self)
     }
 }
 
@@ -230,12 +189,5 @@ extension TabBarViewController: serverListControl {
     func goServer() {
         let vc = ServerListViewController()
         self.present(vc, animated: true)
-        vc.delegate = self
-    }
-}
-
-extension TabBarViewController: selectLocationProtocol {
-    func selectLocation(imageName: String, countryName: String) {
-        delegate?.selectLocation(imageName: imageName, countryName: countryName)
     }
 }

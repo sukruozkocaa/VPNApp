@@ -74,7 +74,7 @@ class ServerListViewController: UIViewController {
        let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .clear
-        tableView.register(UINib(nibName: "denemeTableCell", bundle: nil), forCellReuseIdentifier: "tableCell")
+        tableView.register(UINib(nibName: Constants.shared.serverTableViewNIBName, bundle: nil), forCellReuseIdentifier: Constants.shared.serverTableCellIdentifier)
         return tableView
     }()
     
@@ -86,16 +86,12 @@ class ServerListViewController: UIViewController {
         label.textColor = .white
         return label
     }()
-    
-    let flags = ["turkey","america","france","italy"]
-    var selectIndex: Int = 0
-    var locations = ["Turkey","United States","France","Italy"]
-    
+
     private let optimalServerTableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .clear
-        tableView.register(UINib(nibName: "denemeTableCell", bundle: nil), forCellReuseIdentifier: "tableCell")
+        tableView.register(UINib(nibName: Constants.shared.serverTableViewNIBName, bundle: nil), forCellReuseIdentifier: Constants.shared.serverTableCellIdentifier)
         return tableView
     }()
     
@@ -108,11 +104,17 @@ class ServerListViewController: UIViewController {
         return button
     }()
     
-    var delegate: selectLocationProtocol?
-    
+    let flags = ["turkey","america","france","italy"]
+    var selectIndex: Int = 0
+    var locations = ["Turkey","United States","France","Italy"]
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 29/255, green: 39/255, blue: 49/255, alpha: 1)
+        getAllItems()
+    }
+    
+    func getAllItems() {
         view.addSubview(settingButton)
         settingButton.snp.makeConstraints { (make) in
             make.top.equalTo(view).offset(40)
@@ -202,16 +204,10 @@ extension ServerListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if tableView == fastServerTableView {
-            return 80
-        }
-        else {
-            return 80
-        }
+        return 80
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         self.selectIndex = indexPath.row
-        delegate?.selectLocation(imageName: flags[selectIndex], countryName: locations[selectIndex])
     }
 }

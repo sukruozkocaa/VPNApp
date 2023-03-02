@@ -207,8 +207,48 @@ class HomeViewController: UIViewController {
     var selectCount = 0
     var delegate: serverListControl?
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        imageView.frame = view.bounds
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        getAllItems()
+    }
+    
+    @objc func serverList() {
+        delegate?.goServer()
+    }
+    
+    @objc func onClicked() {
+        if selectCount == 0 {
+            UIView.animate(withDuration: 0.5, delay: 0.6) {
+                let frame = CGRect(x: 0, y: 0, width: self.startView.frame.width, height: self.startView.frame.width)
+                self.startButtonConfigure(isConstraints: true, frame: frame, buttonColor: .green, connectText: "CONNECTED", downloadText: "110 Mb/s", uploadText: "342 Kb/s", connectColor: .green, startViewBdColor: .green, count: 1)
+            }
+        }
+        else if selectCount == 1 {
+            UIView.animate(withDuration: 0.5, delay: 0.6) {                
+                let frame = CGRect(x: 0, y: self.startView.frame.height-self.startButton.frame.height, width: self.startView.frame.width, height: self.startView.frame.width)
+                self.startButtonConfigure(isConstraints: false, frame: frame, buttonColor: .red, connectText: "NOT CONNECTED", downloadText: "0 Mb/s", uploadText: "0 Kb/s", connectColor: .red, startViewBdColor: .red, count: 0)
+            }
+        }
+    }
+    
+    func startButtonConfigure(isConstraints: Bool, frame: CGRect, buttonColor: UIColor, connectText: String, downloadText: String, uploadText: String, connectColor: UIColor, startViewBdColor: UIColor, count: Int) {
+        self.startButton.translatesAutoresizingMaskIntoConstraints = isConstraints
+        self.startButton.frame = frame
+        self.startButton.tintColor = buttonColor
+        self.connectLabel.text = connectText
+        self.downloadpeedLabel.text = downloadText
+        self.uploadSpeedLabel.text = uploadText
+        self.connectLabel.textColor = connectColor
+        self.startView.layer.borderColor = startViewBdColor.cgColor
+        self.selectCount = count
+    }
+    
+    func getAllItems() {
         view.addSubview(imageView)
         view.addSubview(startView)
         startView.snp.makeConstraints { (make) in
@@ -333,42 +373,5 @@ class HomeViewController: UIViewController {
             make.width.equalTo(40)
             make.height.equalTo(40)
         }
-    }
-    
-    @objc func serverList() {
-        delegate?.goServer()
-    }
-    
-    @objc func onClicked() {
-        if selectCount == 0 {
-            UIView.animate(withDuration: 0.5, delay: 0.6) {
-                self.startButton.translatesAutoresizingMaskIntoConstraints = true
-                self.startButton.frame = CGRect(x: 0, y: 0, width: self.startView.frame.width, height: self.startView.frame.width)
-                self.startButton.tintColor = .green
-                self.connectLabel.text = "CONNECTED"
-                self.downloadpeedLabel.text = "110 Mb/s"
-                self.uploadSpeedLabel.text = "342 Kb/s"
-                self.connectLabel.textColor = .green
-                self.startView.layer.borderColor = UIColor.green.cgColor
-                self.selectCount = 1
-            }
-        }
-        else if selectCount == 1 {
-            UIView.animate(withDuration: 0.5, delay: 0.6) {
-                self.startButton.frame = CGRect(x: 0, y: self.startView.frame.height-self.startButton.frame.height, width: self.startView.frame.width, height: self.startView.frame.width)
-                self.startButton.tintColor = .red
-                self.connectLabel.text = "NOT CONNECTED"
-                self.downloadpeedLabel.text = "0 Mb/s"
-                self.uploadSpeedLabel.text = "0 Kb/s"
-                self.connectLabel.textColor = .red
-                self.startView.layer.borderColor = UIColor.red.cgColor
-                self.selectCount = 0
-            }
-        }
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        imageView.frame = view.bounds
     }
 }
